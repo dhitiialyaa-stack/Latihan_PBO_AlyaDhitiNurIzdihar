@@ -4,8 +4,8 @@ require_once 'Tiket.php';
 require_once 'koneksi/database.php';
 
 class TiketRegular extends Tiket {
-    private $tipeAudio;
-    private $lokasiBaris;
+    private $tipeAudio; // Properti tambahan Tahap 4
+    private $lokasiBaris; // Properti tambahan Tahap 4
 
     public function __construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $hargaDasarTiket, $tipeAudio, $lokasiBaris) {
         parent::__construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $hargaDasarTiket);
@@ -13,11 +13,12 @@ class TiketRegular extends Tiket {
         $this->lokasiBaris = $lokasiBaris;
     }
 
+    // Fungsi Query Select Where
     public static function getById($id) {
         $database = new Database();
         $db = $database->getConnection();
 
-        $query = "SELECT * FROM tabel_tiket WHERE id_tiket = :id AND jenis_studio = 'Regular'";
+        $query = "SELECT * FROM tabel_tiket WHERE jenis_studio = 'Regular'";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -37,11 +38,6 @@ class TiketRegular extends Tiket {
             $row['tipe_audio'],
             $row['lokasi_baris']
         );
-    }
-
-    // Overriding Tahap 5: Tarif standar murni
-    public function hitungTotalHarga() {
-        return $this->jumlah_kursi * $this->hargaDasarTiket;
     }
 
     public function tampilkanInfoFasilitas() {

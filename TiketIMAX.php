@@ -4,8 +4,8 @@ require_once 'Tiket.php';
 require_once 'koneksi/database.php';
 
 class TiketIMAX extends Tiket {
-    private $kacamata3dId;
-    private $efekGerakFitur;
+    private $kacamata3dId; // Properti tambahan Tahap 4
+    private $efekGerakFitur; // Properti tambahan Tahap 4
 
     public function __construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $hargaDasarTiket, $kacamata3dId, $efekGerakFitur) {
         parent::__construct($id_tiket, $nama_film, $jadwal_tayang, $jumlah_kursi, $hargaDasarTiket);
@@ -13,11 +13,12 @@ class TiketIMAX extends Tiket {
         $this->efekGerakFitur = $efekGerakFitur;
     }
 
+    // Fungsi Query Select Where
     public static function getById($id) {
         $database = new Database();
         $db = $database->getConnection();
 
-        $query = "SELECT * FROM tabel_tiket WHERE id_tiket = :id AND jenis_studio = 'IMAX'";
+        $query = "SELECT * FROM tabel_tiket WHERE jenis_studio = 'IMAX'";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
@@ -37,11 +38,6 @@ class TiketIMAX extends Tiket {
             $row['kacamata_3d_id'],
             $row['efek_gerak_fitur']
         );
-    }
-
-    // Overriding Tahap 5: Ditambah biaya teknologi layar & audio Rp35.000
-    public function hitungTotalHarga() {
-        return ($this->jumlah_kursi * $this->hargaDasarTiket) + 35000;
     }
 
     public function tampilkanInfoFasilitas() {
